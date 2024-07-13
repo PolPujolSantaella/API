@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const mongoose = require('mongoose');
+
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
@@ -29,6 +31,18 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);*/
+
+mongoose.connect(process.env.CONNECTION_STRING);
+
+const connection = mongoose.connection;
+
+connection.on('error', () => {
+  console.log('Error Connection to database');
+})
+
+connection.once('open', () => {
+  console.log('Connected to database...');
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
